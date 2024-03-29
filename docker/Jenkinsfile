@@ -13,8 +13,9 @@ pipeline {
         stage('Junit tests coverage'){
           steps{
             junit healthScaleFactor: 0.1,
+            allowEmptyResults: true,
             stdioRetention: '',
-            testResults: './tests-report/*.xml'
+            testResults: '**/tests-report/*.xml'
           }
         }
         // stage('Building image'){
