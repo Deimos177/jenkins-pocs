@@ -14,7 +14,7 @@ pipeline {
           steps{
             junit healthScaleFactor: 0.1,
             stdioRetention: '',
-            testResults: './target/test/reports/*.xml'
+            testResults: './tests-report/*.xml'
           }
         }
         // stage('Building image'){
