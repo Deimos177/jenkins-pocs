@@ -8,8 +8,13 @@ pipeline {
                   extensions: [],
                   userRemoteConfigs: [[credentialsId: 'git-credentials',
                   url: "${repo}"]])
-                sh(script: 'ls')
             }
         }
+        stage('Tests'){
+            sh(script: 'mvn clean verify')
+        }
+        // stage('Building image'){
+
+        // }
     }
 }
