@@ -18,8 +18,12 @@ pipeline {
             testResults: '**/tests-report/*.xml'
           }
         }
-        // stage('Building image'){
-
-        // }
+        stage('Building image'){
+          steps{
+            echo 'Starting to build the docker image'
+            image = readMavenPom(file: 'pom.xml').getArtifactId()
+            echo "image to build: ${image}:${env.BUILD_ID}"
+          }
+        }
     }
 }
