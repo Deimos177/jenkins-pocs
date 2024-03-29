@@ -1,14 +1,13 @@
-/* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent any
     stages {
         stage('Clone repo') {
             steps {
-                git(
-                  credentialsId: 'jenkins-repo',
-                  branch: [[name: "${params.repoBranch}"]],
-                  url: "${params.repo}",
-                )
+                checkout scm: [$class: 'GitSCM',
+                branches: [[name: "*/${params.repoBranch}"]],
+                userRemoteConfigs: [[credentialsId: 'jenkins-repo',
+                url: "${repo}"
+                ]]]
                 sh(script: 'ls')
             }
         }
