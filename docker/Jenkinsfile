@@ -6,7 +6,7 @@ pipeline {
             steps {
                 git(
                   credentialsId: 'jenkins-repo',
-                  branch: "${params.repoBranch}",
+                  branch: [[name: "${params.repoBranch}"]],
                   url: "${params.repo}",
                 )
                 sh(script: 'ls')
