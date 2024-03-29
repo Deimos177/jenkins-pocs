@@ -2,9 +2,14 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Clone repo') {
             steps {
-                echo 'Hello world'
+                git(
+                  credentialsId: 'jenkins-repo',
+                  branch: "${params.repoBranch}",
+                  url: "${params.repo}",
+                )
+                sh(script: 'ls')
             }
         }
     }
