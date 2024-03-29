@@ -2,30 +2,30 @@ pipeline {
     agent any
     stages {
         stage('Clone repo') {
-            steps {
-                checkout scmGit(
+      steps {
+        checkout scmGit(
                   branches: [[name: "*/${params.repoBranch}"]],
                   extensions: [],
                   userRemoteConfigs: [[credentialsId: 'git-credentials',
                   url: "${repo}"]])
-            }
+      }
         }
-        stage('Junit tests coverage'){
-          steps{
+        stage('Junit tests coverage') {
+          steps {
             junit healthScaleFactor: 0.1,
             allowEmptyResults: true,
             stdioRetention: '',
             testResults: '**/tests-report/*.xml'
           }
         }
-        stage('Building image'){
-          steps{
-            script{
-              echo 'Starting to build the docker image'
-              step(readMavenPom(file: './pom.xml'))
-              image = readMavenPom().getArtifactId()
-              echo "image to build: ${image}:${env.BUILD_ID}"
-            }
+        stage('Building image') {
+          steps {
+        script {
+          echo 'Starting to build the docker image'
+          def pom = readMavenPom(file: './pom.xml')
+          def image = pom.artifactId
+          echo "image to build: ${image}:${env.BUILD_ID}"
+        }
           }
         }
     }
