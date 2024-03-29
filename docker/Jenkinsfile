@@ -24,8 +24,8 @@ pipeline {
           echo 'Starting to build the docker image'
           def pom = readMavenPom(file: './pom.xml')
           def image = pom.artifactId
-          echo "image to build: ${params.default-registry}/${image}:${env.BUILD_ID}"
-          image = docker.build("${params.default-registry}/${image}:${env.BUILD_ID}")
+          echo "image to build: ${params.registry}/${image}:${env.BUILD_ID}"
+          image = docker.build("${params.registry}/${image}:${env.BUILD_ID}")
           image.push()
             }
           }
