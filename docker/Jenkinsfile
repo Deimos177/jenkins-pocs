@@ -22,8 +22,8 @@ pipeline {
           steps {
         script {
           echo 'Starting to build the docker image'
-          def pom = readMavenPom(file: './pom.xml')
-          def image = pom.artifactId
+          pom = readFile 'pom.xml'
+          image = pom.artifactId
           echo "image to build: ${image}:${env.BUILD_ID}"
         }
           }
