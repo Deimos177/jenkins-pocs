@@ -3,11 +3,11 @@ pipeline {
     stages {
         stage('Clone repo') {
             steps {
-                checkout scm: [$class: 'GitSCM',
-                branches: [[name: "*/${params.repoBranch}"]],
-                userRemoteConfigs: [[credentialsId: 'jenkins-repo',
-                url: "${repo}"
-                ]]]
+                checkout scmGit(
+                  branches: [[name: "*/${params.repoBranch}"]],
+                  extensions: [],
+                  userRemoteConfigs: [[credentialsId: 'git-credentials',
+                  url: "${repo}"]])
                 sh(script: 'ls')
             }
         }
