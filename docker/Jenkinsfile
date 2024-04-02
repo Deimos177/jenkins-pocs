@@ -1,34 +1,36 @@
 pipeline {
-    agent any
-    stages {
-        stage('Clone repo') {
+  agent any
+  stages {
+    stage('Clone repo') {
       steps {
         checkout scmGit(
-                  branches: [[name: "*/${params.repoBranch}"]],
-                  extensions: [],
-                  userRemoteConfigs: [[credentialsId: 'git-credentials',
-                  url: "${repo}"]])
+          branches: [[name: "*/${params.repoBranch}"]],
+          extensions: [],
+          userRemoteConfigs: [[credentialsId: 'git-credentials',
+          url: "${params.repo}"]])
       }
-        }
-        stage('Junit tests coverage') {
-          steps {
-            junit healthScaleFactor: 0.1,
-            allowEmptyResults: true,
-            stdioRetention: '',
-            testResults: '**/tests-report/*.xml'
-          }
-        }
-        stage('Building image') {
-          steps {
+    }
+    stage('Junit tests coverage') {
+      steps {
+        junit healthScaleFactor: 0.1,
+        allowEmptyResults: true,
+        stdioRetention: '',
+        testResults: '**/tests-report/*.xml'
+      }
+    }
+    stage('Building image') {
+      steps {
         script {
           echo 'Starting to build the docker image'
-          def pom = readMavenPom(file: './pom.xml')
-          def image = pom.artifactId
+          pom = readMavenPom(file: './pom.xml')
+          image = pom.artifactId
           echo "image to build: ${params.registry}/${image}:${env.BUILD_ID}"
           image = docker.build("${params.registry}/${image}:${env.BUILD_ID}")
-          image.push()
-            }
+          withDockerRegistry(credentialsId: 'registry-credentials', url: 'marsdeimos') {
+            image.push()
           }
         }
+      }
     }
+  }
 }
