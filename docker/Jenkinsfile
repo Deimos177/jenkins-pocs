@@ -26,8 +26,9 @@ pipeline {
           image = pom.artifactId
           echo "image to build: ${params.registry}/${image}:${env.BUILD_ID}"
           image = docker.build("${params.registry}/${image}:${env.BUILD_ID}")
-          withDockerRegistry(credentialsId: 'registry-credentials', url: 'https://hub.docker.com/') {
-            image.push()
+          withCredentials([usernameColonPassword(credentialsId: 'registry-credentials', variable: 'username', variable: 'password')]) {
+          sh "docker login -u ${env.username} -p ${env.password}"
+          image.push()Password
           }
         }
       }
