@@ -30,7 +30,7 @@ pipeline {
           sh "docker login -u ${env.registryUser} -p ${env.registryPass}"
           image.push()
           }
-          docker.prune()
+          sh "docker image prune -f"
         }
       }
     }
