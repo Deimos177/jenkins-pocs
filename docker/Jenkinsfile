@@ -27,9 +27,10 @@ pipeline {
           echo "image to build: ${params.registry}/${image}:${env.BUILD_ID}"
           image = docker.build("${params.registry}/${image}:${env.BUILD_ID}")
           withCredentials([usernamePassword(credentialsId: 'registry-credentials', passwordVariable: 'registryPass', usernameVariable: 'registryUser')]) {
-          sh "docker login -u ${env.username} -p ${env.password}"
+          sh "docker login -u ${env.registryUser} -p ${env.registryPass}"
           image.push()Password
           }
+          docker.prune()
         }
       }
     }
