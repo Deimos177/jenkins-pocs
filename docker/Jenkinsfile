@@ -26,7 +26,7 @@ pipeline {
           image = pom.artifactId
           echo "image to build: ${params.registry}/${image}:${env.BUILD_ID}"
           image = docker.build("${params.registry}/${image}:${env.BUILD_ID}")
-          withDockerRegistry(credentialsId: 'registry-credentials', url: 'marsdeimos') {
+          withDockerRegistry(credentialsId: 'registry-credentials', url: 'https://hub.docker.com/') {
             image.push()
           }
         }
